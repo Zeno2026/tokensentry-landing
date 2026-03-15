@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Token Sentry — Check Before You Connect</title>
+  <meta name="description" content="Free crypto scam detection bot. Scan tokens, URLs, and wallets for scams before you connect your wallet. Instant results on Telegram.">
+  <meta property="og:title" content="Token Sentry — Crypto Scam Prevention">
+  <meta property="og:description" content="Scan any crypto token, URL, or wallet address for scams. Free. Instant. On Telegram.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tokensentry.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@tokensentry_bot">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0a0b0d;
+      color: #e4e4e7;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .gradient-bg {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 80px 0 60px; }
+    .shield-icon { font-size: 64px; margin-bottom: 24px; display: block; }
+    h1 { font-size: 48px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 16px;
+         background: linear-gradient(135deg, #fff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .tagline { font-size: 20px; color: #94a3b8; max-width: 500px; margin: 0 auto 40px; }
+    .cta-button {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: #3b82f6; color: white; font-size: 18px; font-weight: 600;
+      padding: 16px 32px; border-radius: 12px; text-decoration: none;
+      transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .cta-button:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3); }
+    .cta-sub { margin-top: 16px; font-size: 14px; color: #64748b; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 40px 0; text-align: center; }
+    .stat-number { font-size: 36px; font-weight: 800; color: #f43f5e; }
+    .stat-label { font-size: 14px; color: #94a3b8; margin-top: 4px; }
+
+    /* How it works */
+    .section { padding: 60px 0; }
+    .section-title { font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 48px; }
+    .steps { display: grid; gap: 32px; }
+    .step {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 32px; display: flex; gap: 20px; align-items: flex-start;
+    }
+    .step-num {
+      background: #3b82f6; color: white; width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;
+    }
+    .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .step p { color: #94a3b8; font-size: 15px; }
+
+    /* Risk demo */
+    .risk-demo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+    .risk-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 24px; text-align: center;
+    }
+    .risk-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+    .risk-card h4 { font-size: 16px; margin-bottom: 4px; }
+    .risk-card p { font-size: 13px; color: #94a3b8; }
+
+    /* What we check */
+    .checks { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 32px; }
+    .check-item {
+      background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px;
+      display: flex; gap: 12px; align-items: center;
+    }
+    .check-icon { font-size: 24px; }
+    .check-item h4 { font-size: 15px; font-weight: 600; }
+    .check-item p { font-size: 13px; color: #94a3b8; }
+
+    /* Bottom CTA */
+    .bottom-cta { text-align: center; padding: 80px 0; }
+    .bottom-cta h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
+    .bottom-cta p { color: #94a3b8; margin-bottom: 32px; font-size: 18px; }
+
+    /* Footer */
+    footer { text-align: center; padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.06); color: #64748b; font-size: 13px; }
+    footer a { color: #94a3b8; text-decoration: none; }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 32px; }
+      .tagline { font-size: 16px; }
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .stat-number { font-size: 24px; }
+      .risk-demo { grid-template-columns: 1fr; }
+      .checks { grid-template-columns: 1fr; }
+      .step { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="gradient-bg"></div>
+  <div class="container">
+
+    <div class="hero">
+      <span class="shield-icon">🛡️</span>
+      <h1>Token Sentry</h1>
+      <p class="tagline">Scan any crypto token, URL, or wallet for scams — before you connect your wallet.</p>
+      <a href="https://t.me/TokenSentry_Bot" class="cta-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.94 8.13l-2.01 9.47c-.15.67-.54.83-1.1.52l-3.03-2.23-1.46 1.41c-.16.16-.3.3-.61.3l.22-3.06 5.55-5.02c.24-.22-.05-.34-.37-.13L8.55 13.7l-2.93-.91c-.64-.2-.65-.64.13-.95l11.44-4.41c.53-.19 1-.05.75.7z"/></svg>
+        Open on Telegram — It's Free
+      </a>
+      <p class="cta-sub">No download. No signup. Just message the bot.</p>
+    </div>
+
+    <div class="stats">
+      <div>
+        <div class="stat-number">$17B</div>
+        <div class="stat-label">Stolen in crypto scams (2025)</div>
+      </div>
+      <div>
+        <div class="stat-number">77%</div>
+        <div class="stat-label">Of victims didn't know they were scammed</div>
+      </div>
+      <div>
+        <div class="stat-number">&lt;10s</div>
+        <div class="stat-label">To get your risk report</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Send us anything suspicious</h3>
+            <p>A token name, contract address, website URL, wallet address, or just describe the situation in plain English.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>We scan it instantly</h3>
+            <p>Our engine checks smart contracts, phishing databases, holder concentration, liquidity, token age, and dozens of scam patterns.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Get a clear answer</h3>
+            <p>No jargon. Just a risk rating with plain English explanation of what we found and what it means.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="risk-demo">
+        <div class="risk-card">
+          <span class="risk-icon">🟢</span>
+          <h4>Safe</h4>
+          <p>No red flags found</p>
+        </div>
+        <div class="risk-card">
+          <span class="risk-icon">🟡</span>
+          <h4>Caution</h4>
+          <p>Some concerns — proceed carefully</p>
+        </div>
+        <div class="risk-card">
+          <span class="risk-icon">🔴</span>
+          <h4>Danger</h4>
+          <p>High risk — do not interact</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">What We Check</h2>
+      <div class="checks">
+        <div class="check-item">
+          <span class="check-icon">🪙</span>
+          <div>
+            <h4>Token Contracts</h4>
+            <p>Honeypots, hidden mints, rug pull mechanics, holder concentration</p>
+          </div>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">🌐</span>
+          <div>
+            <h4>URLs & Websites</h4>
+            <p>Phishing sites, fake exchanges, impersonation domains</p>
+          </div>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">👛</span>
+          <div>
+            <h4>Wallet Addresses</h4>
+            <p>Known scammers, drainer wallets, blacklisted addresses</p>
+          </div>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">🧠</span>
+          <div>
+            <h4>Scam Patterns</h4>
+            <p>Pig butchering, fake airdrops, guaranteed returns, seed phrase phishing</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <h2>Check before you connect.</h2>
+      <p>Free. Instant. No wallet connection required.</p>
+      <a href="https://t.me/TokenSentry_Bot" class="cta-button">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.94 8.13l-2.01 9.47c-.15.67-.54.83-1.1.52l-3.03-2.23-1.46 1.41c-.16.16-.3.3-.61.3l.22-3.06 5.55-5.02c.24-.22-.05-.34-.37-.13L8.55 13.7l-2.93-.91c-.64-.2-.65-.64.13-.95l11.44-4.41c.53-.19 1-.05.75.7z"/></svg>
+        Open Token Sentry on Telegram
+      </a>
+    </div>
+
+    <footer>
+      <p>Token Sentry © 2026 · <a href="https://x.com/tokensentry_bot">@tokensentry_bot</a> · Built to protect.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
