@@ -125,6 +125,32 @@
     .threat h4 { font-size: 14px; font-weight: 600; color: #f43f5e; margin-bottom: 6px; }
     .threat p { font-size: 13px; color: #94a3b8; }
 
+    /* Live stats banner */
+    .live-stats {
+      display: none;
+      align-items: center; justify-content: center; gap: 10px;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 999px;
+      padding: 10px 20px;
+      margin: 0 auto 32px;
+      width: fit-content;
+      font-size: 14px;
+      color: #22c55e;
+      font-weight: 500;
+    }
+    .live-stats.visible { display: inline-flex; }
+    .live-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
     /* Bottom CTA */
     .bottom-cta { text-align: center; padding: 80px 0; }
     .bottom-cta h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; }
@@ -156,6 +182,10 @@
       <img src="/logo-512.png" alt="Token Sentry" width="80" height="80" style="margin-bottom: 24px; border-radius: 20px;">
       <h1>Token Sentry</h1>
       <p class="tagline">Crypto scam prevention for normal people. Scan tokens, URLs, wallets, and messages — before you connect your wallet.</p>
+      <div class="live-stats" id="liveStats">
+        <span class="live-dot"></span>
+        <span id="liveStatsText"></span>
+      </div>
       <a href="https://t.me/TokenSentry_Bot" class="cta-button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.94 8.13l-2.01 9.47c-.15.67-.54.83-1.1.52l-3.03-2.23-1.46 1.41c-.16.16-.3.3-.61.3l.22-3.06 5.55-5.02c.24-.22-.05-.34-.37-.13L8.55 13.7l-2.93-.91c-.64-.2-.65-.64.13-.95l11.44-4.41c.53-.19 1-.05.75.7z"/></svg>
         Open on Telegram — It's Free
@@ -389,5 +419,31 @@
     </footer>
 
   </div>
+
+  <script>
+    // Live stats — only renders what the pipeline authorizes.
+    // The pipeline gates display: hidden (<100 checks), status (>=100), count (>=1000).
+    (function () {
+      fetch('/stats.json?t=' + Date.now())
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; })
+        .then(function (stats) {
+          if (!stats || !stats.display) return;
+          var el = document.getElementById('liveStats');
+          var txt = document.getElementById('liveStatsText');
+          if (!el || !txt) return;
+
+          if (stats.display.mode === 'count' && stats.display.value) {
+            var n = Number(stats.display.value).toLocaleString('en-US');
+            txt.textContent = n + ' ' + (stats.display.label || 'scams checked').toLowerCase();
+            el.classList.add('visible');
+          } else if (stats.display.mode === 'status') {
+            txt.textContent = stats.display.label || 'Live protection active';
+            el.classList.add('visible');
+          }
+          // mode === 'hidden' -> stays invisible, no number shown
+        });
+    })();
+  </script>
 </body>
 </html>
