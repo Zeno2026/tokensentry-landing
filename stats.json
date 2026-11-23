@@ -1,5 +1,5 @@
 {
-  "checks_total": 31,
+  "checks_total": 32,
   "users_total": 5,
   "dangerous_detected": 31,
   "watched_wallets": 0,
@@ -8,6 +8,6 @@
     "label": null,
     "value": null
   },
-  "generated_at": "2026-11-23T16:00:40.482Z",
+  "generated_at": "2026-11-23T17:00:40.501Z",
   "updated_date": "2026-11-23"
 }
