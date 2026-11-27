@@ -1,13 +1,13 @@
 {
-  "checks_total": 48,
+  "checks_total": 49,
   "users_total": 6,
-  "dangerous_detected": 47,
+  "dangerous_detected": 48,
   "watched_wallets": 0,
   "display": {
     "mode": "hidden",
     "label": null,
     "value": null
   },
-  "generated_at": "2026-11-27T13:00:40.508Z",
+  "generated_at": "2026-11-27T14:00:40.495Z",
   "updated_date": "2026-11-27"
 }
